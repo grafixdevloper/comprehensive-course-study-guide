@@ -1,0 +1,114 @@
+LECTURE 2: NFA AND ε-NFA
+Week 3-4 - Non-deterministic Finite Automata
+
+NON-DETERMINISTIC FINITE AUTOMATON (NFA)
+
+Definition: An NFA is a 5-tuple M = (Q, Σ, δ, q0, F) where:
+- Q: finite set of states
+- Σ: finite alphabet
+- δ: Q × Σ → P(Q) (transition function to POWER SET of Q)
+- q0 ∈ Q: start state
+- F ⊆ Q: set of accept states
+
+Key difference from DFA:
+- δ(q, a) is a SET of states (can be empty, one, or multiple)
+- Multiple possible next states for same input
+- Computation branches - accepts if ANY path reaches accept state
+
+Example: NFA accepting strings ending in 01
+Q = {q0, q1, q2}
+Σ = {0,1}
+q0 = q0
+F = {q2}
+δ:
+    δ(q0, 0) = {q0, q1}
+    δ(q0, 1) = {q0}
+    δ(q1, 1) = {q2}
+    δ(q2, 0) = ∅
+    δ(q2, 1) = ∅
+
+This NFA has 3 states vs 3 for DFA - same size but simpler to think about!
+
+EXTENDED TRANSITION FUNCTION FOR NFA
+δ*: Q × Σ* → P(Q)
+δ*(q, ε) = {q}
+δ*(q, wa) = ∪_{p ∈ δ*(q,w)} δ(p, a)
+
+Language accepted: L(M) = {w | δ*(q0, w) ∩ F ≠ ∅}
+
+ε-NFA (NFA with ε-transitions)
+
+Definition: An ε-NFA is a 5-tuple M = (Q, Σ, δ, q0, F) where:
+δ: Q × (Σ ∪ {ε}) → P(Q)
+
+Can transition WITHOUT consuming input!
+
+ε-CLOSURE
+ε-closure(q) = set of states reachable from q using only ε-transitions
+Includes q itself.
+
+Algorithm to compute ε-closure:
+1. Start with {q}
+2. For each state in set, add all ε-successors
+3. Repeat until no new states added
+
+Example ε-NFA:
+States: {q0, q1, q2}
+ε(q0) = {q0, q1}
+ε(q1) = {q1, q2}
+ε(q2) = {q2}
+δ(q0, 0) = {q2}
+δ(q1, 1) = {q2}
+
+This accepts strings starting with 0 OR 1 (after ε-moves)
+
+SUBSET CONSTRUCTION: NFA → DFA
+
+Theorem: For every NFA, there exists an equivalent DFA.
+
+Algorithm:
+1. DFA states = subsets of NFA states (P(Q))
+2. Start state = ε-closure({q0})
+3. For each DFA state S and symbol a:
+   δ_DFA(S, a) = ∪_{q∈S} ε-closure(δ_NFA(q, a))
+4. Accept states = those containing an NFA accept state
+
+Example: Convert NFA for (0+1)*01 to DFA
+NFA: q0 --0,1--> q0; q0 --0--> q1; q1 --1--> q2 (accept)
+
+Step 1: Start = ε-closure({q0}) = {q0}
+Step 2: From {q0} on 0: δ({q0},0) = {q0,q1}, ε-closure = {q0,q1}
+        From {q0} on 1: δ({q0},1) = {q0}, ε-closure = {q0}
+Step 3: From {q0,q1} on 0: δ({q0,q1},0) = {q0,q1}, ε-closure = {q0,q1}
+        From {q0,q1} on 1: δ({q0,q1},1) = {q0,q2}, ε-closure = {q0,q2}
+Step 4: From {q0,q2} on 0: {q0,q1}
+        From {q0,q2} on 1: {q0}
+Step 5: Accept states: {q0,q2} (contains q2)
+
+Resulting DFA has states: {q0}, {q0,q1}, {q0,q2}
+
+KEY POINTS:
+1. NFA and DFA are equivalent in power
+2. Subset construction may produce up to 2^n states (exponential blowup)
+3. In practice, often much smaller
+4. ε-NFA adds ε-transitions, also equivalent to DFA
+5. ε-closure handles spontaneous transitions
+
+WORKED EXAMPLE 2: NFA for (01+10)*
+NFA design:
+- Start state q0 (also accept)
+- q0 --0--> q1, q1 --1--> q0
+- q0 --1--> q2, q2 --0--> q0
+
+This NFA has 3 states. Subset construction yields DFA with up to 8 states.
+
+MINIMIZATION NOTE: The DFA from subset construction is not necessarily minimal!
+Always minimize after conversion.
+
+PROOF: Equivalence of NFA and DFA
+By induction on string length using extended transition functions.
+Base case: ε - both accept/reject same
+Inductive step: Assume for w, prove for wa
+δ*_DFA(S, wa) = δ_DFA(δ*_DFA(S,w), a) = ...
+δ*_NFA({q0}, wa) = ∪_{p∈δ*_NFA({q0},w)} δ(p,a) = ...
+By construction, these correspond exactly.

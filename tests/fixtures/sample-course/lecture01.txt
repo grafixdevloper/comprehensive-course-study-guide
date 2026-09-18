@@ -1,0 +1,90 @@
+LECTURE 1: INTRODUCTION TO AUTOMATA THEORY
+Week 1 - Mathematical Preliminaries
+
+ALPHABETS, STRINGS, AND LANGUAGES
+
+Definition 1.1: Alphabet
+An alphabet Σ is a finite, non-empty set of symbols.
+Examples: Σ = {0,1}, Σ = {a,b,c}, Σ = {0,1,2,3,4,5,6,7,8,9}
+
+Definition 1.2: String
+A string (or word) over Σ is a finite sequence of symbols from Σ.
+The empty string is denoted by ε (or λ).
+Length of string w is |w|.
+
+Definition 1.3: Language
+A language L over Σ is a set of strings over Σ (i.e., L ⊆ Σ*).
+Can be finite or infinite.
+
+Operations on Strings:
+- Concatenation: xy = x followed by y
+- Power: w^n = w concatenated n times
+- Reversal: w^R
+
+Operations on Languages:
+- Union: L1 ∪ L2
+- Intersection: L1 ∩ L2
+- Complement: L' = Σ* \ L
+- Concatenation: L1L2 = {xy | x ∈ L1, y ∈ L2}
+- Kleene Star: L* = ∪_{n≥0} L^n
+- Kleene Plus: L+ = ∪_{n≥1} L^n
+
+FINITE AUTOMATA - OVERVIEW
+
+A finite automaton is a simple model of computation with:
+- Finite set of states
+- Input alphabet
+- Transition function
+- Start state
+- Set of accept states
+
+Two types:
+1. Deterministic Finite Automaton (DFA) - exactly one transition per state-symbol pair
+2. Non-deterministic Finite Automaton (NFA) - zero or more transitions per state-symbol pair
+
+FORMAL DEFINITION OF DFA
+
+Definition: A DFA is a 5-tuple M = (Q, Σ, δ, q0, F) where:
+- Q: finite set of states
+- Σ: finite alphabet
+- δ: Q × Σ → Q (transition function, TOTAL)
+- q0 ∈ Q: start state
+- F ⊆ Q: set of accept (final) states
+
+Example: DFA accepting strings with even number of 0s
+Q = {q_even, q_odd}
+Σ = {0,1}
+q0 = q_even
+F = {q_even}
+δ:
+    δ(q_even, 0) = q_odd
+    δ(q_even, 1) = q_even
+    δ(q_odd, 0) = q_even
+    δ(q_odd, 1) = q_odd
+
+EXTENDED TRANSITION FUNCTION
+δ*: Q × Σ* → Q
+δ*(q, ε) = q
+δ*(q, wa) = δ(δ*(q, w), a) for w ∈ Σ*, a ∈ Σ
+
+Language accepted by DFA M:
+L(M) = {w ∈ Σ* | δ*(q0, w) ∈ F}
+
+EXAMPLE: DFA for strings ending in 01
+States: q0 (start), q1 (last was 0), q2 (last was 01 - accept)
+Transitions:
+δ(q0, 0) = q1, δ(q0, 1) = q0
+δ(q1, 0) = q1, δ(q1, 1) = q2
+δ(q2, 0) = q1, δ(q2, 1) = q0
+F = {q2}
+
+This DFA has 3 states. Can we do with fewer? No - Myhill-Nerode says minimum states = number of equivalence classes.
+
+WORKED EXAMPLE 1: DFA for (0+1)*01
+Solution: As above. States track the longest suffix that matches prefix of "01".
+
+Key Points:
+1. DFA must have exactly one transition for each state-symbol pair
+2. No ε-transitions allowed
+3. Deterministic - next state uniquely determined
+4. Always finite number of states

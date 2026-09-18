@@ -1,0 +1,59 @@
+CS301 - AUTOMATA THEORY AND FORMAL LANGUAGES
+MIDTERM EXAMINATION - SPRING 2023
+Duration: 90 minutes
+Maximum Marks: 60
+
+INSTRUCTIONS:
+- Answer ALL questions
+- Section A: 10 questions × 2 marks = 20 marks
+- Section B: Attempt any 4 out of 5 questions × 10 marks = 40 marks
+- Write clearly and show all steps
+
+SECTION A (2 marks each)
+
+Q1. Define an ε-NFA. How does it differ from an NFA?
+
+Q2. Write a regular expression for the language of all strings over {0,1} that do not contain the substring "11".
+
+Q3. State the pumping lemma for regular languages. What is its primary use?
+
+Q4. If L is a regular language, is L^R (reverse of L) regular? Justify.
+
+Q5. What is the distinguishing feature of a minimal DFA?
+
+Q6. Define the language accepted by an NFA.
+
+Q7. Give an example of a language that is not regular but is context-free.
+
+Q8. What is the time complexity of the subset construction algorithm?
+
+Q9. State the closure property of regular languages under homomorphism.
+
+Q10. How many states does the minimal DFA for (0+1)*0(0+1)* have?
+
+SECTION B (10 marks each - Attempt any 4)
+
+Q2. (a) Construct a DFA accepting strings over {0,1} that end with 101.
+     (b) Convert the following ε-NFA to an equivalent DFA:
+         States: {q0, q1, q2}, Alphabet: {0,1}, Start: q0, Accept: {q2}
+         ε-closure: ε(q0) = {q0,q1}, ε(q1) = {q1}, ε(q2) = {q2}
+         δ(q0,0) = {q2}, δ(q1,1) = {q2}
+
+Q3. (a) Using Thompson's construction, convert the regular expression (01+10)* to an ε-NFA.
+     (b) Prove that L = {0^p | p is prime} is not regular using the pumping lemma.
+
+Q4. (a) Minimize the following DFA using the table-filling algorithm. Show all steps:
+        States: {A,B,C,D,E,F}, Alphabet: {0,1}, Start: A, Accept: {E,F}
+        δ(A,0)=B, δ(A,1)=C
+        δ(B,0)=D, δ(B,1)=E
+        δ(C,0)=F, δ(C,1)=D
+        δ(D,0)=D, δ(D,1)=D
+        δ(E,0)=E, δ(E,1)=E
+        δ(F,0)=F, δ(F,1)=F
+     (b) What is the Myhill-Nerode equivalence relation? How does it relate to DFA minimization?
+
+Q4. (a) Prove that regular languages are closed under reversal.
+     (b) Given a DFA M for language L, construct a DFA for L^R.
+
+Q5. (a) Design a DFA for the language L = {w ∈ {0,1}* | w contains 010 as a substring}.
+     (b) Show that the language L = {w ∈ {0,1}* | #0(w) = #1(w)} is not regular.

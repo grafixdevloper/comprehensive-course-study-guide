@@ -1,0 +1,48 @@
+COURSE HANDOUT: CS301 - AUTOMATA THEORY AND FORMAL LANGUAGES
+
+Instructor: Dr. Sarah Mitchell
+Office: CS Building, Room 304
+Email: smitchell@university.edu
+Office Hours: Tue/Thu 2:00-4:00 PM
+
+Teaching Assistant: Alex Chen
+Email: achen@university.edu
+
+COURSE DESCRIPTION
+This course covers the theoretical foundations of computer science, focusing on formal languages, automata theory, and computability. Students will learn to classify languages, design automata, and understand the limits of computation.
+
+TEXTBOOK
+- "Introduction to the Theory of Computation" by Michael Sipser, 3rd Edition
+- "Automata Theory, Languages, and Computation" by Hopcroft, Motwani, Ullman
+
+GRADING
+- Midterm Exam: 30%
+- Final Exam: 40%
+- Assignments: 20%
+- Quizzes: 10%
+
+SCHEDULE
+Week 1-2: Introduction, Mathematical Preliminaries, Alphabets, Strings, Languages
+Week 3-4: Deterministic Finite Automata (DFA) - Definition, Examples, Design
+Week 5-6: Non-deterministic Finite Automata (NFA) - Definition, ε-NFA, Subset Construction
+Week 7-8: Regular Expressions - Syntax, Semantics, Conversion to/from FA
+Week 9-10: Properties of Regular Languages - Pumping Lemma, Closure Properties, Decision Properties
+Week 11-12: DFA Minimization - Table-filling Algorithm, Myhill-Nerode Theorem
+Week 13-14: Context-Free Grammars - Definition, Parse Trees, Ambiguity, Normal Forms
+Week 15-16: Pushdown Automata - Definition, Equivalence with CFG, Deterministic PDA
+
+MIDSEM SYLLABUS (Weeks 1-12)
+- Regular Languages through DFA Minimization
+- All of Unit 1
+
+IMPORTANT DATES
+- Midterm Exam: October 15, 2024 (90 minutes, 60 marks)
+- Assignment 1 Due: September 20
+- Assignment 2 Due: October 5
+- Assignment 3 Due: November 2
+
+ACADEMIC INTEGRITY
+All work must be your own. Collaboration on assignments is limited to discussion of concepts only.
+
+DISABILITY ACCOMMODATIONS
+Contact the Office of Disability Services for accommodations.

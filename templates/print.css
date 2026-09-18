@@ -1,0 +1,587 @@
+/*
+ * Comprehensive Course Study Guide - Print Styles
+ * PDF-specific styling for Chromium/Playwright PDF generation
+ */
+
+/* ==========================================================================
+   Page Setup
+   ========================================================================== */
+
+@page {
+  size: A4;
+  margin: 20mm 18mm 20mm 18mm; /* top right bottom left */
+
+  /* Page counter */
+  @bottom-center {
+    content: counter(page) " / " counter(pages);
+    font-family: 'Inter', sans-serif;
+    font-size: 9pt;
+    color: #666;
+  }
+
+  @top-left {
+    content: string(doc-title);
+    font-family: 'Inter', sans-serif;
+    font-size: 8pt;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @top-right {
+    content: string(chapter-title);
+    font-family: 'Inter', sans-serif;
+    font-size: 8pt;
+    color: #999;
+  }
+}
+
+/* Named strings for running headers */
+h1 { string-set: doc-title content(); }
+h2 { string-set: chapter-title content(); }
+
+/* First page (cover) - no headers/footers */
+@page cover {
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+  margin: 0;
+}
+
+/* Chapter start pages - no top header */
+@page chapter {
+  @top-left { content: none; }
+  @top-right { content: none; }
+}
+
+.cover-page { page: cover; }
+.chapter-start { page: chapter; }
+
+/* ==========================================================================
+   Base Print Styles
+   ========================================================================== */
+
+@media print {
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+    background: white;
+  }
+
+  /* Remove screen-only elements */
+  .no-print, .screen-only { display: none !important; }
+
+  /* Ensure content fits page */
+  .page {
+    width: auto;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: always;
+  }
+}
+
+/* ==========================================================================
+   Typography for Print
+   ========================================================================== */
+
+@media print {
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid-page;
+    orphans: 3;
+    widows: 3;
+  }
+
+  h1 { font-size: 24pt; margin-top: 0; }
+  h2 { font-size: 20pt; margin-top: 30pt; }
+  h3 { font-size: 16pt; margin-top: 24pt; }
+  h4 { font-size: 13pt; margin-top: 18pt; }
+  h5 { font-size: 11pt; margin-top: 14pt; }
+  h6 { font-size: 11pt; margin-top: 12pt; }
+
+  p {
+    orphans: 3;
+    widows: 3;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a::after { content: none; }
+}
+
+/* ==========================================================================
+   Page Breaks
+   ========================================================================== */
+
+@media print {
+  /* Prevent breaks inside these elements */
+  .callout,
+  .revision-box,
+  .question-item,
+  .topic-card,
+  .diagram-container,
+  figure,
+  table,
+  pre,
+  blockquote,
+  .math-display {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Force breaks before major sections */
+  .unit-start,
+  h1 {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  h2.chapter-start {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Prevent headings at bottom of page */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid-page;
+  }
+
+  /* Allow breaks in long tables */
+  table {
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+}
+
+/* ==========================================================================
+   Cover Page
+   ========================================================================== */
+
+@media print {
+  .cover-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    min-height: 297mm;
+    page-break-after: always;
+    break-after: always;
+    background: white;
+  }
+
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 700;
+    color: #1a3c5e;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 12pt;
+  }
+
+  .cover-subtitle {
+    font-size: 18pt;
+    color: #4a4a6a;
+    text-align: center;
+    margin-bottom: 24pt;
+  }
+
+  .cover-meta {
+    font-size: 12pt;
+    color: #6b6b8a;
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  .cover-line {
+    width: 60%;
+    height: 2px;
+    background: #1a3c5e;
+    margin: 24pt auto;
+  }
+}
+
+/* ==========================================================================
+   Tables for Print
+   ========================================================================== */
+
+@media print {
+  table {
+    font-size: 9pt;
+    width: 100%;
+    margin: 12pt 0;
+  }
+
+  th, td {
+    padding: 4pt 6pt;
+    border: 0.5pt solid #ccc;
+  }
+
+  th {
+    background: #1a3c5e !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  tr:nth-child(even) td {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Wide tables can use landscape if needed */
+  .table-landscape {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+
+/* ==========================================================================
+   Figures & Diagrams for Print
+   ========================================================================== */
+
+@media print {
+  figure, .diagram-container {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 18pt 0;
+  }
+
+  figure img, .diagram-container svg, .diagram-container img {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 60vh;
+  }
+
+  figcaption, .diagram-caption {
+    font-size: 9pt;
+    color: #666;
+    margin-top: 6pt;
+  }
+
+  /* Ensure SVG diagrams render crisp */
+  svg {
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+  }
+}
+
+/* ==========================================================================
+   Callout Boxes for Print
+   ========================================================================== */
+
+@media print {
+  .callout {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 12pt 0;
+    padding: 10pt 14pt;
+    border-left-width: 3pt;
+  }
+
+  .callout-title {
+    font-size: 8pt;
+    margin-bottom: 6pt;
+  }
+
+  .callout-content {
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+
+  /* Ensure background colors print */
+  .callout,
+  .priority-badge,
+  .revision-box {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ==========================================================================
+   Priority Badges for Print
+   ========================================================================== */
+
+@media print {
+  .priority-badge {
+    font-size: 7pt;
+    padding: 2pt 6pt;
+  }
+}
+
+/* ==========================================================================
+   Revision Box for Print
+   ========================================================================== */
+
+@media print {
+  .revision-box {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 12pt 0;
+    padding: 10pt 14pt;
+    border: 0.5pt solid #ccc;
+    border-radius: 6pt;
+  }
+
+  .revision-box-title {
+    font-size: 9pt;
+    margin-bottom: 6pt;
+    padding-bottom: 6pt;
+    border-bottom: 0.5pt solid #ddd;
+  }
+
+  .revision-box-content {
+    font-size: 9pt;
+    line-height: 1.6;
+  }
+}
+
+/* ==========================================================================
+   Question Items for Print
+   ========================================================================== */
+
+@media print {
+  .question-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 10pt 0;
+    padding: 10pt 14pt;
+    border: 0.5pt solid #ddd;
+    border-radius: 6pt;
+  }
+
+  .question-header {
+    margin-bottom: 6pt;
+  }
+
+  .question-number {
+    font-size: 10pt;
+  }
+
+  .question-marks {
+    font-size: 7pt;
+    padding: 2pt 6pt;
+  }
+
+  .question-text {
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+}
+
+/* ==========================================================================
+   Topic Cards for Print
+   ========================================================================== */
+
+@media print {
+  .topic-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 12pt 0;
+    padding: 14pt;
+    border: 0.5pt solid #ddd;
+    border-radius: 8pt;
+  }
+
+  .topic-card-title {
+    font-size: 14pt;
+    margin-bottom: 8pt;
+  }
+
+  .topic-card-content {
+    font-size: 10pt;
+    line-height: 1.55;
+  }
+}
+
+/* ==========================================================================
+   MathJax for Print
+   ========================================================================== */
+
+@media print {
+  .MathJax {
+    font-size: 11pt !important;
+  }
+
+  .mjx-chtml {
+    line-height: 1.8 !important;
+  }
+
+  .mjx-chtml[display="true"] {
+    margin: 12pt 0;
+    overflow-x: visible;
+  }
+
+  /* Prevent math from being cut off */
+  .mjx-chtml * {
+    max-width: none !important;
+  }
+}
+
+/* ==========================================================================
+   Lists for Print
+   ========================================================================== */
+
+@media print {
+  ul, ol {
+    margin: 6pt 0 6pt 24pt;
+  }
+
+  li {
+    margin: 2pt 0;
+  }
+}
+
+/* ==========================================================================
+   Code Blocks for Print
+   ========================================================================== */
+
+@media print {
+  pre {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    font-size: 8pt;
+    background: #f5f5f5 !important;
+    border: 0.5pt solid #ddd;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  code {
+    font-size: 9pt;
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ==========================================================================
+   Footnotes & References
+   ========================================================================== */
+
+@media print {
+  .footnotes {
+    font-size: 8pt;
+    color: #666;
+    border-top: 1pt solid #ccc;
+    padding-top: 12pt;
+    margin-top: 24pt;
+  }
+
+  .source-index {
+    font-size: 8pt;
+    line-height: 1.5;
+  }
+
+  .source-index-entry {
+    margin: 4pt 0;
+    padding: 4pt 8pt;
+    background: #fafafa;
+    border-radius: 4pt;
+  }
+}
+
+/* ==========================================================================
+   Table of Contents
+   ========================================================================== */
+
+@media print {
+  .toc {
+    page-break-after: always;
+    break-after: always;
+  }
+
+  .toc-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 4pt 0;
+    border-bottom: 1pt dotted #ccc;
+  }
+
+  .toc-entry.chapter {
+    font-weight: bold;
+    font-size: 11pt;
+  }
+
+  .toc-entry.section {
+    font-size: 10pt;
+    padding-left: 24pt;
+  }
+
+  .toc-entry.subsection {
+    font-size: 9pt;
+    padding-left: 48pt;
+    color: #666;
+  }
+
+  .toc-page {
+    font-family: 'Inter', sans-serif;
+    color: #666;
+  }
+}
+
+/* ==========================================================================
+   Index
+   ========================================================================== */
+
+@media print {
+  .index {
+    column-count: 2;
+    column-gap: 24pt;
+    font-size: 9pt;
+  }
+
+  .index-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 2pt 0;
+  }
+
+  .index-subentry {
+    padding-left: 18pt;
+  }
+}
+
+/* ==========================================================================
+   Utility for Print
+   ========================================================================== */
+
+@media print {
+  .break-before { page-break-before: always; break-before: page; }
+  .break-after { page-break-after: always; break-after: page; }
+  .break-inside-avoid { page-break-inside: avoid; break-inside: avoid; }
+  .no-break { page-break-inside: avoid; break-inside: avoid; }
+
+  .visible-print { display: block !important; }
+  .hidden-print { display: none !important; }
+}

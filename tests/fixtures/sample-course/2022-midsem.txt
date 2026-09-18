@@ -1,0 +1,56 @@
+CS301 - AUTOMATA THEORY AND FORMAL LANGUAGES
+MIDTERM EXAMINATION - FALL 2022
+Duration: 90 minutes
+Maximum Marks: 60
+
+INSTRUCTIONS:
+- Answer ALL questions
+- Section A: 10 questions × 2 marks = 20 marks
+- Section B: 4 questions × 10 marks = 40 marks
+- Write clearly and show all steps
+
+SECTION A (2 marks each)
+
+Q1. Define a Deterministic Finite Automaton (DFA).
+
+Q2. What is the difference between NFA and DFA?
+
+Q3. State the pumping lemma for regular languages.
+
+Q4. Give a regular expression for the language L = {w ∈ {0,1}* | w contains an even number of 0s}.
+
+Q5. Is the language L = {0^n 1^n | n ≥ 0} regular? Justify briefly.
+
+Q6. What is ε-closure of a state in an ε-NFA?
+
+Q7. Define language accepted by a DFA.
+
+Q8. State the Myhill-Nerode theorem.
+
+Q9. If L1 and L2 are regular languages, is L1 ∩ L2 regular?
+
+Q10. What is the minimum number of states in a DFA accepting strings ending with "01"?
+
+SECTION B (10 marks each)
+
+Q2. (a) Construct a DFA for the language L = {w ∈ {0,1}* | w ends with 01}.
+     (b) Convert the following NFA to an equivalent DFA using subset construction:
+         States: {q0, q1, q2}, Alphabet: {0,1}, Start: q0, Accept: {q2}
+         δ(q0,0) = {q0,q1}, δ(q0,1) = {q0}
+         δ(q1,0) = {q2}, δ(q1,1) = ∅
+         δ(q2,0) = ∅, δ(q2,1) = ∅
+
+Q3. (a) Convert the regular expression (0+1)*01(0+1)* to an ε-NFA using Thompson's construction.
+     (b) Prove that the language L = {0^n 1^n | n ≥ 0} is not regular using the pumping lemma.
+
+Q4. (a) Minimize the following DFA using the table-filling algorithm:
+        States: {A,B,C,D,E}, Alphabet: {0,1}, Start: A, Accept: {D}
+        δ(A,0)=B, δ(A,1)=C
+        δ(B,0)=D, δ(B,1)=E
+        δ(C,0)=E, δ(C,1)=D
+        δ(D,0)=D, δ(D,1)=D
+        δ(E,0)=E, δ(E,1)=E
+     (b) Explain the equivalence between DFA and NFA.
+
+Q5. (a) Prove that regular languages are closed under intersection.
+     (b) Given two DFAs M1 and M2, describe the construction of a DFA accepting L(M1) ∩ L(M2).

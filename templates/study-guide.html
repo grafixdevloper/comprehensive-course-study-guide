@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Guide - {{course}}</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="print.css" media="print">
+
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'ams',
+        macros: {
+          RR: '{\\mathbb{R}}',
+          NN: '{\\mathbb{N}}',
+          ZZ: '{\\mathbb{Z}}',
+          QQ: '{\\mathbb{Q}}',
+          CC: '{\\mathbb{C}}',
+          bold: ['{\\mathbf{#1}}', 1],
+          vec: ['{\\vec{#1}}', 1],
+          mat: ['{\\begin{bmatrix}#1\\end{bmatrix}}', 1],
+          // Automata notation
+          delta: '{\\delta}',
+          Sigma: '{\\Sigma}',
+          epsilon: '{\\varepsilon}',
+          to: '{\\rightarrow}',
+          subset: '{\\subseteq}',
+          union: '{\\cup}',
+          intersect: '{\\cap}'
+        }
+      },
+      svg: {
+        fontCache: 'global',
+        scale: 1.0
+      },
+      chtml: {
+        scale: 1.0
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      startup: {
+        ready: () => {
+          MathJax.startup.defaultReady();
+          // Signal that MathJax is ready
+          document.dispatchEvent(new CustomEvent('mathjax-ready'));
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+  <!-- Local MathJax fallback (copy mathjax folder for offline use) -->
+  <!-- <script src="mathjax/tex-svg.js" async></script> -->
+</head>
+<body>
+  <div id="app">
+    <!-- Cover Page -->
+    <section class="page cover-page" id="cover">
+      <div class="cover-content">
+        <h1 class="cover-title">{{course}}</h1>
+        <p class="cover-subtitle">Comprehensive Exam Study Guide</p>
+        <div class="cover-line"></div>
+        <div class="cover-meta">
+          <p>{{syllabus_covered}}</p>
+          <p>Generated: {{generation_date}}</p>
+          {{#if pyq_available}}
+          <p>Based on {{analysis_summary.papers_analyzed}} previous-year papers</p>
+          {{else}}
+          <p class="no-pywarning">⚠ No previous-year question papers provided — priorities derived from course materials only</p>
+          {{/if}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="page toc" id="toc">
+      <h1>Table of Contents</h1>
+      <nav class="toc-nav">
+        {{#each units}}
+        <div class="toc-entry chapter">
+          <span>Unit {{unit_number}}: {{title}}</span>
+          <span class="toc-page">{{page_offset}}</span>
+        </div>
+        {{#each topics}}
+        <div class="toc-entry section">
+          <span>{{title}} <span class="priority-badge priority-{{priority_slug}}">{{priority}}</span></span>
+          <span class="toc-page">{{page_offset}}</span>
+        </div>
+        {{#each subtopics}}
+        <div class="toc-entry subsection">
+          <span>{{this}}</span>
+        </div>
+        {{/each}}
+        {{/each}}
+        {{/each}}
+
+        <div class="toc-entry chapter">
+          <span>Exam Analysis & PYQ Mapping</span>
+          <span class="toc-page">{{pyq_page}}</span>
+        </div>
+        <div class="toc-entry chapter">
+          <span>Revision Reference</span>
+          <span class="toc-page">{{revision_page}}</span>
+        </div>
+        <div class="toc-entry chapter">
+          <span>Question Bank</span>
+          <span class="toc-page">{{qb_page}}</span>
+        </div>
+        <div class="toc-entry chapter">
+          <span>Source Index</span>
+          <span class="toc-page">{{source_page}}</span>
+        </div>
+      </nav>
+    </section>
+
+    <!-- Unit Pages -->
+    {{#each units}}
+    <section class="page unit-start" id="unit-{{unit_number}}">
+      <header class="unit-header">
+        <h1>Unit {{unit_number}}</h1>
+        <h2>{{title}}</h2>
+        <p class="unit-syllabus">{{syllabus_reference}}</p>
+        {{#if priority}}
+        <span class="priority-badge priority-{{priority_slug}}">{{priority}} PRIORITY</span>
+        {{/if}}
+      </header>
+
+      {{#each topics}}
+      <article class="topic-card" id="{{topic_id}}">
+        <header class="topic-card-header">
+          <h3 class="topic-card-title">{{title}}
+            <span class="priority-badge priority-{{priority_slug}} ml-sm">{{priority}}</span>
+          </h3>
+          <div class="topic-card-meta">
+            {{#if priority_score}}
+            <span class="priority-score">Score: {{priority_score}}</span>
+            {{/if}}
+          </div>
+        </header>
+
+        <div class="topic-card-content">
+          {{#each sections}}
+          <section class="section section-{{type}}">
+            {{#if title}}
+            <h4>{{title}}</h4>
+            {{/if}}
+
+            {{#if type "definition"}}
+            <div class="callout callout-definition">
+              <div class="callout-title">📖 Definition</div>
+              <div class="callout-content">{{content}}</div>
+            </div>
+            {{/if}}
+
+            {{#if type "formula"}}
+            <div class="callout callout-formula">
+              <div class="callout-title">📐 Formula</div>
+              <div class="callout-content math-display">
+                {{#if content.latex}}\[{{content.latex}}\]{{/if}}
+                {{#if content.description}}<p>{{content.description}}</p>{{/if}}
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "explanation"}}
+            <div class="explanation">
+              {{content}}
+            </div>
+            {{/if}}
+
+            {{#if type "algorithm"}}
+            <div class="algorithm">
+              <h5>{{content.name}}</h5>
+              <ol>
+                {{#each content.steps}}
+                <li>{{this}}</li>
+                {{/each}}
+              </ol>
+            </div>
+            {{/if}}
+
+            {{#if type "worked_example"}}
+            <div class="callout callout-tip">
+              <div class="callout-title">✏️ Worked Example</div>
+              <div class="callout-content">
+                <p><strong>Problem:</strong> {{content.problem}}</p>
+                <p><strong>Solution:</strong> {{content.solution}}</p>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "diagram"}}
+            <div class="diagram-container" id="{{metadata.diagram_id}}">
+              <!-- SVG will be injected here -->
+              <figcaption class="diagram-caption">{{content.spec.description}}</figcaption>
+            </div>
+            {{/if}}
+
+            {{#if type "pyq_appearances"}}
+            <div class="callout callout-repeated">
+              <div class="callout-title">🔁 Previous-Year Appearances</div>
+              <div class="callout-content">
+                <ul>
+                  {{#each content}}
+                  <li><strong>{{year}} {{exam}}</strong> — {{question}} ({{marks}} marks): {{text}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "question_patterns"}}
+            <div class="callout callout-important">
+              <div class="callout-title">📝 Common Question Forms</div>
+              <div class="callout-content">
+                <ul>
+                  {{#each content}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "exam_tips"}}
+            <div class="callout callout-tip">
+              <div class="callout-title">💡 Exam Tips</div>
+              <div class="callout-content">
+                <ul>
+                  {{#each content}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "common_mistakes"}}
+            <div class="callout callout-mistake">
+              <div class="callout-title">⚠ Common Mistakes</div>
+              <div class="callout-content">
+                <ul>
+                  {{#each content}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if type "revision_box"}}
+            <div class="revision-box">
+              <div class="revision-box-title">📋 Quick Revision: {{../title}}</div>
+              <div class="revision-box-content">
+                <ul>
+                  {{#each content}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+            {{/if}}
+
+            {{#if source}}
+            <p class="source-ref">Sources: {{#each source}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}</p>
+            {{/if}}
+          </section>
+          {{/each}}
+        </div>
+      </article>
+      {{/each}}
+    </section>
+    {{/each}}
+
+    <!-- Exam Analysis Section -->
+    {{#if pyq_available}}
+    <section class="page" id="exam-analysis">
+      <h1>Exam Analysis</h1>
+
+      <h2>Exam Pattern</h2>
+      <div class="topic-card">
+        <div class="topic-card-content">
+          <h3>Paper Structure</h3>
+          <table>
+            <thead><tr><th>Section</th><th>Questions</th><th>Avg Marks</th><th>Marks Range</th></tr></thead>
+            <tbody>
+              {{#each exam_pattern.section_details}}
+              <tr>
+                <td>Section {{@key}}</td>
+                <td>{{questions}}</td>
+                <td>{{avg_marks}}</td>
+                <td>{{marks_range.[0]}}–{{marks_range.[1]}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+
+          <h3>Question Type Distribution</h3>
+          <table>
+            <thead><tr><th>Type</th><th>Count</th></tr></thead>
+            <tbody>
+              {{#each exam_pattern.question_type_distribution}}
+              <tr><td>{{@key}}</td><td>{{this}}</td></tr>
+              {{/each}}
+            </tbody>
+          </table>
+
+          <p><strong>Theory vs Problem Ratio:</strong> {{exam_pattern.theory_vs_problem_ratio}}</p>
+        </div>
+      </div>
+
+      <h2>Exact Repetitions</h2>
+      {{#each pyq_analysis.exact_repetitions}}
+      <div class="callout callout-repeated">
+        <div class="callout-title">★ Exact Repetition — {{occurrences}} occurrences</div>
+        <div class="callout-content">
+          <p><strong>Question:</strong> {{canonical_question}}</p>
+          <p><strong>Years:</strong> {{#each years}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Exams:</strong> {{#each exam_types}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Marks:</strong> {{#each marks}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+        </div>
+      </div>
+      {{/each}}
+
+      <h2>Question Families (Conceptual Repetition)</h2>
+      {{#each pyq_analysis.question_families}}
+      <div class="callout callout-priority">
+        <div class="callout-title">★ Question Family: {{canonical_name}} ({{occurrences}} variants)</div>
+        <div class="callout-content">
+          <p><strong>Core Concept:</strong> {{concept}}</p>
+          <p><strong>Years:</strong> {{#each years}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Variants:</strong></p>
+          <ul>
+            {{#each members}}
+            <li>{{year}} {{exam}}: {{text}} ({{marks}} marks)</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      {{/each}}
+
+      <h2>Recurring Patterns</h2>
+      <table>
+        <thead><tr><th>Pattern</th><th>Frequency</th><th>Papers</th><th>Years</th><th>Avg Marks</th><th>Subtopics</th></tr></thead>
+        <tbody>
+          {{#each pyq_analysis.pattern_repetitions}}
+          <tr>
+            <td>{{description}}</td>
+            <td>{{frequency}}</td>
+            <td>{{papers}}</td>
+            <td>{{#each years}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</td>
+            <td>{{avg_marks}}</td>
+            <td>{{#each subtopics}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+    {{/if}}
+
+    <!-- Revision Reference -->
+    <section class="page" id="revision">
+      <h1>Quick Revision Reference</h1>
+
+      {{#if formula_revision.length}}
+      <h2>Key Formulas</h2>
+      <div class="revision-box">
+        <div class="revision-box-title">Formulas</div>
+        <div class="revision-box-content">
+          <table>
+            <thead><tr><th>Topic</th><th>Formula</th><th>Description</th></tr></thead>
+            <tbody>
+              {{#each formula_revision}}
+              <tr>
+                <td>{{topic}}</td>
+                <td class="math-inline">\({{latex}}\)</td>
+                <td>{{description}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if definition_revision.length}}
+      <h2>Key Definitions</h2>
+      <div class="revision-box">
+        <div class="revision-box-title">Definitions</div>
+        <div class="revision-box-content">
+          <ul>
+            {{#each definition_revision}}
+            <li><strong>{{topic}}:</strong> {{text}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if algorithm_revision.length}}
+      <h2>Key Algorithms</h2>
+      <div class="revision-box">
+        <div class="revision-box-title">Algorithms</div>
+        <div class="revision-box-content">
+          {{#each algorithm_revision}}
+          <h4>{{name}} ({{topic}})</h4>
+          <ol>
+            {{#each steps}}
+            <li>{{this}}</li>
+            {{/each}}
+          </ol>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      <h2>Topic Priority Summary</h2>
+      <table>
+        <thead><tr><th>Unit</th><th>Topic</th><th>Priority</th><th>Score</th><th>Evidence</th></tr></thead>
+        <tbody>
+          {{#each priorities.priorities}}
+          <tr>
+            <td>Unit {{unit_number}}</td>
+            <td>{{topic_title}}</td>
+            <td><span class="priority-badge priority-{{priority_slug}}">{{priority}}</span></td>
+            <td>{{priority_score}}</td>
+            <td>{{#each evidence_summary}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Question Bank -->
+    <section class="page" id="question-bank">
+      <h1>Question Bank</h1>
+
+      <h2>By Unit & Topic</h2>
+      {{#each question_bank.by_unit}}
+      <h3>{{@key}}</h3>
+      {{#each ../question_bank.by_topic}}
+      {{#if (eq @key (some_condition))}}
+      <h4>{{@key}}</h4>
+      <ul>
+        {{#each this}}
+        <li class="question-item">
+          <div class="question-header">
+            <span class="question-number">{{question_number}}</span>
+            {{#if marks}}<span class="question-marks">{{marks}} marks</span>{{/if}}
+            {{#if year}}<span class="question-year">{{year}} {{exam}}</span>{{/if}}
+          </div>
+          <p class="question-text">{{normalized_text}}</p>
+          {{#if canonical_concept_id}}<p class="question-family">Family: {{canonical_concept_id}}</p>{{/if}}
+        </li>
+        {{/each}}
+      </ul>
+      {{/if}}
+      {{/each}}
+      {{/each}}
+
+      {{#if question_bank.families}}
+      <h2>Question Families</h2>
+      {{#each question_bank.families}}
+      <div class="callout callout-priority">
+        <div class="callout-title">{{canonical_name}}</div>
+        <div class="callout-content">
+          <p><strong>Concept:</strong> {{concept}}</p>
+          <p><strong>Occurrences:</strong> {{occurrences}} across {{years.length}} years</p>
+          <p><strong>Variants:</strong></p>
+          <ul>
+            {{#each members}}
+            <li>{{year}} {{exam}}: {{text}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      {{/each}}
+      {{/if}}
+
+      {{#if question_bank.exact_repetitions}}
+      <h2>Exact Repetitions</h2>
+      {{#each question_bank.exact_repetitions}}
+      <div class="callout callout-repeated">
+        <div class="callout-title">{{canonical_question}} ({{occurrences}}×)</div>
+        <div class="callout-content">
+          <p><strong>Years:</strong> {{#each years}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Exams:</strong> {{#each exam_types}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Questions:</strong> {{#each question_numbers}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+          <p><strong>Marks:</strong> {{#each marks}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+        </div>
+      </div>
+      {{/each}}
+      {{/if}}
+    </section>
+
+    <!-- Source Index -->
+    <section class="page" id="source-index">
+      <h1>Source Index</h1>
+      <p>All content in this guide is traceable to the following source materials:</p>
+
+      <table>
+        <thead>
+          <tr><th>File</th><th>Classification</th><th>Confidence</th><th>Pages/Slides</th><th>Items Extracted</th></tr>
+        </thead>
+        <tbody>
+          {{#each source_index}}
+          <tr>
+            <td>{{filename}}</td>
+            <td>{{classification}}</td>
+            <td>{{confidence}}</td>
+            <td>{{#each pages_slides}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</td>
+            <td>{{extracted_items}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      {{#if disclaimer}}
+      <div class="callout callout-important">
+        <div class="callout-title">⚠ Important Disclaimer</div>
+        <div class="callout-content">
+          <p>{{disclaimer}}</p>
+        </div>
+      </div>
+      {{/if}}
+    </section>
+  </div>
+
+  <!-- Diagram Generation Scripts -->
+  <script src="../diagrams/diagram-utils.js"></script>
+  <script src="../diagrams/automata.js"></script>
+  <script src="../diagrams/flowcharts.js"></script>
+  <script src="../diagrams/block-diagrams.js"></script>
+  <script src="../diagrams/graphs.js"></script>
+  <script src="../diagrams/trees.js"></script>
+
+  <!-- Main Renderer -->
+  <script>
+    // This will be populated by generate_document.py with actual content
+    const STUDY_GUIDE_DATA = {{content_json}};
+
+    // Render the study guide
+    function renderStudyGuide() {
+      // Render diagrams
+      renderAllDiagrams();
+
+      // Render dynamic content
+      populateDynamicContent();
+
+      // Signal ready for PDF generation
+      document.dispatchEvent(new CustomEvent('study-guide-ready'));
+    }
+
+    // Wait for MathJax then render
+    if (window.MathJax) {
+      MathJax.startup.promise.then(() => {
+        renderStudyGuide();
+      });
+    } else {
+      document.addEventListener('mathjax-ready', renderStudyGuide);
+      // Fallback timeout
+      setTimeout(renderStudyGuide, 5000);
+    }
+
+    function renderAllDiagrams() {
+      const containers = document.querySelectorAll('.diagram-container[id]');
+      containers.forEach(container => {
+        const diagramId = container.id;
+        const topicCard = container.closest('.topic-card');
+        if (!topicCard) return;
+
+        // Find diagram spec in data
+        const topicId = topicCard.id;
+        const topicData = findTopicData(topicId);
+        if (!topicData) return;
+
+        const diagramSection = topicData.sections.find(s => s.type === 'diagram' && s.metadata?.diagram_id === diagramId);
+        if (!diagramSection) return;
+
+        const spec = diagramSection.content.spec;
+        const svg = generateDiagram(spec);
+        if (svg) {
+          container.insertBefore(svg, container.firstChild);
+        }
+      });
+    }
+
+    function findTopicData(topicId) {
+      for (const unit of STUDY_GUIDE_DATA.units) {
+        for (const topic of unit.topics) {
+          if (topic.topic_id === topicId) return topic;
+        }
+      }
+      return null;
+    }
+
+    function generateDiagram(spec) {
+      switch (spec.type) {
+        case 'automaton':
+          return window.DiagramGenerators?.automaton?.(spec) || createPlaceholderDiagram(spec);
+        case 'flowchart':
+          return window.DiagramGenerators?.flowchart?.(spec) || createPlaceholderDiagram(spec);
+        case 'block-diagram':
+          return window.DiagramGenerators?.blockDiagram?.(spec) || createPlaceholderDiagram(spec);
+        case 'graph':
+          return window.DiagramGenerators?.graph?.(spec) || createPlaceholderDiagram(spec);
+        case 'tree':
+          return window.DiagramGenerators?.tree?.(spec) || createPlaceholderDiagram(spec);
+        default:
+          return createPlaceholderDiagram(spec);
+      }
+    }
+
+    function createPlaceholderDiagram(spec) {
+      const div = document.createElement('div');
+      div.style.cssText = 'border: 2px dashed #ccc; padding: 2rem; border-radius: 8px; color: #666;';
+      div.textContent = `[Diagram: ${spec.type} — ${spec.description || spec.title || 'Technical diagram'}]`;
+      return div;
+    }
+
+    function populateDynamicContent() {
+      // Priority badges slug conversion
+      document.querySelectorAll('.priority-badge').forEach(badge => {
+        const text = badge.textContent.trim();
+        const slug = text.toLowerCase().replace(/\s+/g, '-').replace('priority', '');
+        badge.classList.add(`priority-${slug}`);
+      });
+
+      // Add page class for print styles
+      document.querySelectorAll('.page').forEach((page, i) => {
+        page.dataset.pageNumber = i + 1;
+      });
+    }
+  </script>
+</body>
+</html>

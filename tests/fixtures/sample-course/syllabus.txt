@@ -1,0 +1,32 @@
+AUTOMATA THEORY AND FORMAL LANGUAGES - MIDSEM SYLLABUS
+
+UNIT 1: Regular Languages and Finite Automata
+- Alphabets, Strings, Languages
+- Deterministic Finite Automata (DFA)
+- Non-deterministic Finite Automata (NFA)
+- ε-NFA
+- Equivalence of DFA, NFA, ε-NFA
+- Regular Expressions
+- Conversion: Regular Expression ↔ Finite Automata
+- Pumping Lemma for Regular Languages
+- Closure Properties of Regular Languages
+- Decision Properties of Regular Languages
+- DFA Minimization
+
+UNIT 2: Context-Free Grammars and Languages
+- Context-Free Grammars (CFG)
+- Parse Trees
+- Ambiguity in CFG
+- Simplification of CFG
+- Chomsky Normal Form
+- Greibach Normal Form
+- Pumping Lemma for CFL
+- Closure Properties of CFL
+
+UNIT 3: Pushdown Automata
+- Definition of PDA
+- Acceptance by Final State and Empty Stack
+- Equivalence of PDA and CFG
+- Deterministic PDA
+
+MIDSEM EXAM COVERS: UNIT 1 ONLY (Regular Languages through DFA Minimization)
