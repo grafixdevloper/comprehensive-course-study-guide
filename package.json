@@ -1,0 +1,23 @@
+{
+  "name": "@grafixdevloper/comprehensive-course-study-guide",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for generating exam-focused course study guides",
+  "license": "MIT",
+  "bin": {
+    "comprehensive-course-study-guide": "./bin/install.js"
+  },
+  "files": [
+    "agents",
+    "diagrams",
+    "references",
+    "scripts",
+    "skills",
+    "templates",
+    "README.md",
+    "LICENSE",
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
