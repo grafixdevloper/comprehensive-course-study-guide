@@ -17,13 +17,12 @@ A production-ready Claude Code plugin that analyzes academic course materials an
 ## Installation
 
 ```bash
-# Clone or copy the plugin directory
-cp -r comprehensive-course-study-guide ~/.claude/plugins/
+# Install plugin into ~/.claude/plugins/comprehensive-course-study-guide
+npx @grafixdevloper/comprehensive-course-study-guide
 
 # Install dependencies
 pip install pymupdf python-docx python-pptx pdfplumber
-npm install -g playwright
-playwright install chromium
+npx playwright install chromium
 
 # Optional dependencies
 pip install pandas openpyxl pillow pytesseract
@@ -34,7 +33,7 @@ pip install pandas openpyxl pillow pytesseract
 
 ```bash
 # Start Claude with the plugin
-claude --plugin-dir ./comprehensive-course-study-guide
+claude --plugin-dir ~/.claude/plugins/comprehensive-course-study-guide
 
 # Generate study guide from course materials
 /comprehensive-course-study-guide:course-study-guide ./course-materials
